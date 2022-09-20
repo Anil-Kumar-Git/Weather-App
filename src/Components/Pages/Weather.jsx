@@ -1,7 +1,8 @@
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { Grid } from "semantic-ui-react";
+import { Grid, } from "semantic-ui-react";
+import Recent from "./Recent";
 import Result from "./Result";
 import Search from "./Search";
 
@@ -13,6 +14,7 @@ const Weather = () => {
   const [message, setMessage] = useState("");
   const [color, setColor] = useState("");
   const [weatherData, setWeatherData] = useState();
+  const [recent, setRecent] = useState([]);
 
   const apikey = "1cad30e3e974f797a047ea62fd1c8970";
 
@@ -56,18 +58,21 @@ const Weather = () => {
     }
   };
 
-  const searchWeather = async () => {
+  const searchWeather = async (city) => {
     if ((lat && lon) || city) {
+      console.log(city)
       setLoading(true)
       if (city) {
         const wdata = await axios.get(
-          `https://api.openweathermap.org/data/2.5/weather?q=${value.city}&appid=${apikey}`
+          `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}`
         );
       
         if (wdata.status == 200) {
+          setLoading(false)
           setLat(wdata.data.coord.lat);
           setLon(wdata.data.coord.lon);
           setWeatherData(wdata.data);
+          setRecent(...recent.push(wdata.data))
           setMessage("your today weather");
           setColor("green");
         } else if (wdata.response.status == 404) {
@@ -79,8 +84,10 @@ const Weather = () => {
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apikey}`
         );
         if (wdata.status == 200) {
+          setLoading(false)
           setCity(wdata.data.name);
           setWeatherData(wdata.data);
+          setRecent(...recent.push(wdata.data))
           setMessage("your today weather");
           setColor("green");
         } else {
@@ -93,19 +100,37 @@ const Weather = () => {
       setColor("red");
     }
   };
+
+  const recentWeather=async(event,what)=>{
+     if(what=="pre"){
+      setCity(event.name)
+      setLat(event.coord.lat)
+      setLon(event.coord.lon)
+      setWeatherData(event)
+     }else{
+       setCity(event)
+       await searchWeather(event)
+     }
+  }
+  
+
   return (
     <>
-      <Grid padded>
-        <Grid.Column>
+      <Grid padded columns={2}>
+        <Grid.Column style={{marginTop:78}} width={3}>
+         <Recent recent={recent} dataForResult={recentWeather}/>
+        </Grid.Column>
+        <Grid.Column width={12}>
           <Search
             change={change}
             value={value}
             location={locationHandel}
             weather={searchWeather}
           />
+           <Result loading={loading} message={message} color={color} data={weatherData} />
         </Grid.Column>
       </Grid>
-      <Result loading={loading} message={message} color={color} data={weatherData} />
+     
     </>
   );
 };

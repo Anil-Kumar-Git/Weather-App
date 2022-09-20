@@ -14,7 +14,7 @@ const Search = ({value,change,location,weather}) => {
       </Form.Button>
       <Form.Input name="lat" value={value.lat} width={6} onChange={change} type='number' label='Lat' />
       <Form.Input name="lon" value={value.lon} width={6} onChange={change} type='number' label='Lon'/>
-      <Form.Button size='tiny' onClick={weather} ><i aria-hidden="true" className="search big icon"></i></Form.Button>
+      <Form.Button size='tiny' onClick={()=>weather(value.city)} ><i aria-hidden="true" className="search big icon"></i></Form.Button>
     </Form.Group>
   </Form>
   )
