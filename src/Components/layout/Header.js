@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   const [display, setDisplay] = useState("none");
-  
+  const url=window.location.href;
+  console.log(url)
   return (
     <div>
       <Grid padded className="tablet computer only">

@@ -15,6 +15,7 @@ const Weather = () => {
   const [color, setColor] = useState("");
   const [weatherData, setWeatherData] = useState();
   const [recent, setRecent] = useState([]);
+  // const recentdata=[]
 
   const apikey = "1cad30e3e974f797a047ea62fd1c8970";
 
@@ -58,27 +59,40 @@ const Weather = () => {
     }
   };
 
+  const getToDate=()=>{
+    var today = new Date(),
+    date =  today.getDate()+ '-' + (today.getMonth() + 1) + '/' + today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+return date;
+}
+ 
+  const ourData=(item)=>{
+    const toDate=getToDate();
+    item.date=toDate;
+  const data=[...recent,item]
+  setRecent(data)
+  }
+
   const searchWeather = async (city) => {
-    if ((lat && lon) || city) {
-      console.log(city)
+   try{  
+    console.log("wdtadaa")
+   if (lat && lon || city) {
       setLoading(true)
       if (city) {
+    console.log(city,"wdtadaa")
+
         const wdata = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apikey}`
         );
-      
         if (wdata.status == 200) {
           setLoading(false)
           setLat(wdata.data.coord.lat);
           setLon(wdata.data.coord.lon);
           setWeatherData(wdata.data);
-          setRecent(...recent.push(wdata.data))
+           ourData(wdata.data)
+          // setRecent(...recent.push(wdata.data))
           setMessage("your today weather");
           setColor("green");
-        } else if (wdata.response.status == 404) {
-          setMessage("city not found please try again");
-          setColor("orange");
-        }
+        } 
       } else {
         const wdata = await axios.get(
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apikey}`
@@ -87,18 +101,24 @@ const Weather = () => {
           setLoading(false)
           setCity(wdata.data.name);
           setWeatherData(wdata.data);
-          setRecent(...recent.push(wdata.data))
+          ourData(wdata.data)
           setMessage("your today weather");
           setColor("green");
-        } else {
-          setMessage("data is not matching please try again");
-          setColor("orange");
         }
       }
     } else {
+      setLoading(false)
       setMessage("please tell me your city or cordinates");
       setColor("red");
     }
+  }catch(error){
+   setWeatherData('')
+    setLat('');
+    setLon('');
+    setLoading(false)
+    setMessage("city not found please try again");
+    setColor("orange");
+  }
   };
 
   const recentWeather=async(event,what)=>{
@@ -117,7 +137,7 @@ const Weather = () => {
   return (
     <>
       <Grid padded columns={2}>
-        <Grid.Column style={{marginTop:78}} width={3}>
+        <Grid.Column style={{marginTop:78}} width={4}>
          <Recent recent={recent} dataForResult={recentWeather}/>
         </Grid.Column>
         <Grid.Column width={12}>

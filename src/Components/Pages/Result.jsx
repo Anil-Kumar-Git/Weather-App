@@ -16,7 +16,7 @@ const Result = ({ message, color, data, loading }) => {
           <>
             {data ? (
               <>
-                <Segment color="orange">
+                <Segment color="green">
                   {currentDateTime}
                   <Image
                     src={`http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`}
@@ -26,7 +26,7 @@ const Result = ({ message, color, data, loading }) => {
                   {data.weather[0].description}
                 </Segment>
 
-                <Table columns={2}>
+                <Table color="olive" columns={2}>
                   <Table.Row>
                     <Table.Cell active>
                       <th>Feels Like</th>
@@ -57,9 +57,9 @@ const Result = ({ message, color, data, loading }) => {
                     <Table.Cell active>Today Sky</Table.Cell>
                     <Table.Cell active>{data.weather[0].main}</Table.Cell>
                   </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Header</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
+                  <Table.Row positive>
+                    <Table.Cell > See your weather and lets enjoy your day </Table.Cell>
+                    <Table.Cell></Table.Cell>
                   </Table.Row>
                 </Table>
               </>

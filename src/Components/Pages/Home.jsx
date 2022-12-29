@@ -8,21 +8,29 @@ import { Grid,
   Segment,
   Sticky,
 Embed } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const contextRef = createRef()
-  console.log(contextRef,"con")
+  const url=window.location.href;
+
+    console.log(url.split('/').lastIndexOf())
 
   const Placeholder = () => <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-
+ 
   return (
-    <div>
-    <Grid padded centered columns={3}>
+    <div >
+    <Grid padded centered columns={2}>
     <Grid.Row centered>
           <h1>Today Weather</h1>
         </Grid.Row>
     <Grid.Column>
-      <Ref innerRef={contextRef}>
+    <h2>
+    <Link style={{color:'orange'}} to="/weather">
+         lets go !
+      </Link> And find out what the weather is like around you......</h2>
+
+      {/* <Ref innerRef={contextRef}>
         <Segment>
           {_.times(10, (i) => (
             <Placeholder key={i} />
@@ -72,7 +80,7 @@ const Home = () => {
             </Sticky>
           </Rail>
         </Segment>
-      </Ref>
+      </Ref> */}
     </Grid.Column>
   </Grid>
     </div>

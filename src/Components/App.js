@@ -5,9 +5,12 @@ import Home from "./Pages/Home";
 import Weather from "./Pages/Weather";
 
 const App = () => {
+
   return (
     <BrowserRouter>
-       <div className="section">
+       <div 
+      //  className="section containerBackground"
+       >
             <Routes>
               <Route element={<Layout/>}>
               <Route path="/" element={<Home/>} />
